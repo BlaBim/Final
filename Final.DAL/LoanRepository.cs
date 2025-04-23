@@ -24,14 +24,14 @@ namespace Final.DAL
                 .Include(l => l.UserName)
                 .ToList();
         }
-        public IEnumerable<Loan> GetAllExpiredLoans()
+        public IEnumerable<Loan> GetAllExpiredLoans(DateTime currentDate)
         {
             //var overdueDate = DateTime.Now.AddDays(-30);
             return _context.Loans
-                .Where(l => l.ReturnDate == null && (DateTime.Now - l.LoanDate).TotalDays > 30)
-                .Include(l => l.BookName)
-                .Include(l => l.UserName)
-                .ToList();
+                .Where(l => l.ReturnDate == null) 
+                .AsEnumerable()
+                .Where(l => (currentDate - l.LoanDate).TotalDays > 30) 
+                .ToList(); 
         }
         public Loan GetLoanById(int id)
         {

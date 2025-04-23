@@ -32,6 +32,27 @@ namespace Final.DAL
                 .Include(r => r.UserName)
                 .FirstOrDefault(r => r.Id == id);
         }
+        public IEnumerable<BookRating> GetRatingsByUserId(int userId)
+        {
+            return _context.BookRatings
+                .Where(r => r.UserId == userId)
+                .Include(r => r.BookName)
+                .ToList();
+        }
+        public IEnumerable<BookRating> GetRatingsByBookId(int bookId)
+        {
+            return _context.BookRatings
+                .Where(r => r.BookId == bookId)
+                .Include(r => r.UserName)
+                .ToList();
+        }
+        public BookRating GetRatingBy2Id(int bookId, int userId)
+        {
+            return _context.BookRatings
+                .Include(r => r.BookName)
+                .Include(r => r.UserName)
+                .FirstOrDefault(r => r.UserId == userId && r.BookId == bookId);
+        }
 
         public void AddRating(BookRating rating)
         {
@@ -48,6 +69,14 @@ namespace Final.DAL
         public void DeleteRatingById(int id)
         {
             var rating = GetRatingById(id);
+            if (rating != null)
+            {
+                _context.BookRatings.Remove(rating);
+                _context.SaveChanges();
+            }
+        }
+        public void DeleteRating(BookRating rating)
+        {
             if (rating != null)
             {
                 _context.BookRatings.Remove(rating);

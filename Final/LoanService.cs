@@ -25,7 +25,10 @@ namespace Final
         {
             return _loanRepository.GetAllLoans();
         }
-
+        public IEnumerable<Loan> GetAllExpiredLoans()
+        {
+            return _loanRepository.GetAllExpiredLoans(DateTime.Now);
+        }
         public void AddLoan(int userId, int bookId)
         {
             var user = _userRepository.GetUserById(userId);
